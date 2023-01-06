@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { helpHttp } from '../../helpers/helpHttp';
 import DataTable from '../DataTable';
 import Form from '../Form';
 
@@ -6,6 +7,20 @@ const CrudApi = () => {
 
   const [players, setPlayers] = useState([]);
   const [dataToEdit, setDataToEdit] = useState(null);
+
+  let api = helpHttp();
+  let url = 'http://localhost:5000/players';
+
+  useEffect(() => {
+    api.get(url)
+      .then(res => {
+        if (!res.err) {
+          setPlayers(res);
+        } else {
+          setPlayers(null);
+        }
+      });
+  }, []);
 
   const createData = data => {
     data.id = Date.now();

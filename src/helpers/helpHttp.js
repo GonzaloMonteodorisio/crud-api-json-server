@@ -1,5 +1,5 @@
 export const helpHttp = () => {
-  const customFetch = (endpoint, options) => {
+  const customFetch = async (endpoint, options) => {
     const defaultHeader = {
       accept: "application/json"
     }
@@ -21,7 +21,8 @@ export const helpHttp = () => {
     setTimeout(() => controller.abort(), 3000);
 
     try {
-      const res = fetch(endpoint, options);
+      const res = await fetch(endpoint, options);
+      console.info('res: ', res);
       return (
         res.ok
           ? res.json()
