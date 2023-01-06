@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import DataTable from '../DataTable';
 import Form from '../Form';
 
-import { initialPlayers } from '../../data/initialPlayers';
+const CrudApi = () => {
 
-const CrudApp = () => {
-
-  const [players, setPlayers] = useState(initialPlayers);
+  const [players, setPlayers] = useState([]);
   const [dataToEdit, setDataToEdit] = useState(null);
 
   const createData = data => {
@@ -51,4 +49,4 @@ const CrudApp = () => {
   );
 }
 
-export default CrudApp;
+export default CrudApi;
