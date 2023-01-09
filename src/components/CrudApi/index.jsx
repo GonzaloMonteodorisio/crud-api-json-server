@@ -2,25 +2,38 @@ import React, { useEffect, useState } from 'react';
 import { helpHttp } from '../../helpers/helpHttp';
 import DataTable from '../DataTable';
 import Form from '../Form';
+import Loader from '../Loader';
+import Message from '../Message';
 
 const CrudApi = () => {
 
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState(null);
   const [dataToEdit, setDataToEdit] = useState(null);
 
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   let api = helpHttp();
-  let url = 'http://localhost:5000/players';
+  let url = 'http://localhost:5000/player';
 
   useEffect(() => {
-    api.get(url)
+    setLoading(true);
+    helpHttp().get(url)
       .then(res => {
         if (!res.err) {
+          console.info('res.err: ', res.err);
           setPlayers(res);
-        } else {
-          setPlayers(null);
-        }
+          setError(null);
+          setLoading(null);
+        } 
+      })
+      .catch(error => {
+        console.info('error: ', error);
+        setPlayers(null);
+        setError(error);
+        setLoading(null);
       });
-  }, []);
+  }, [url]);
 
   const createData = data => {
     data.id = Date.now();
@@ -54,11 +67,22 @@ const CrudApi = () => {
           dataToEdit={dataToEdit} 
           setDataToEdit={setDataToEdit} 
         />
-        <DataTable 
-          data={players} 
-          deleteData={deleteData}
-          setDataToEdit={setDataToEdit} 
-        />
+        {loading && <Loader />}
+        {
+          error && 
+            <Message 
+              msg={`Error: ${error.status}: ${error.statusText}`}
+              bgColor='#dc3545'
+            />
+        }
+        {
+          players &&         
+            <DataTable 
+              data={players} 
+              deleteData={deleteData}
+              setDataToEdit={setDataToEdit} 
+            />
+        }
       </article>
     </>
   );

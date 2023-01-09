@@ -25,14 +25,17 @@ export const helpHttp = () => {
       console.info('res: ', res);
       return (
         res.ok
-          ? res.json()
+          ? await res.json()
           : Promise.reject({
             err: true,
             status: res.status || '00',
             statusText: res.statusText || 'An error occurred'
           }));
     } catch (err) {
+      console.info('Caugth!');
       return err;
+    } finally {
+      console.info('Call ended!');
     }
   }
 
