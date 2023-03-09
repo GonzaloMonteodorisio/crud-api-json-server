@@ -14,7 +14,7 @@ const CrudApi = () => {
   const [loading, setLoading] = useState(false);
 
   let api = helpHttp();
-  let url = 'http://localhost:5000/player';
+  let url = 'http://localhost:5000/players';
 
   useEffect(() => {
     setLoading(true);
@@ -38,6 +38,11 @@ const CrudApi = () => {
   const createData = data => {
     data.id = Date.now();
     console.info('data: ', data);
+    console.info('api: ', api);
+    console.info('api.post: ', api.post());
+
+    api.post(url, {body: data})
+      .then(res => console.info('post-res: ', res));
     setPlayers([...players, data]);
   }
 
